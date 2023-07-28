@@ -18,4 +18,16 @@ public class InvoiceServiceImpl implements InvoiceService{
         invoiceDao.save(invoice);
         return invoice;
     }
+
+    @Override
+    public List<Invoice> getInvoices() {
+        return  invoiceDao.findAll();
+    }
+
+    @Override
+    public Invoice deleteInvoice(long id) {
+        Invoice invoice = invoiceDao.findById(id).get();
+        return invoice;
+    }
+
 }

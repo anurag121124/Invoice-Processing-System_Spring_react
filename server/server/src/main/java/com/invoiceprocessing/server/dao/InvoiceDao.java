@@ -1,2 +1,8 @@
-package com.invoiceprocessing.server.dao;public interface InvoiceDao {
+package com.invoiceprocessing.server.dao;
+
+import com.invoiceprocessing.server.model.Invoice;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface InvoiceDao extends JpaRepository<Invoice, Long> {
+
 }

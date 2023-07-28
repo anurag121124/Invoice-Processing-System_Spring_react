@@ -1,36 +1,86 @@
-
 import React from "react";
 import Header from "../components/header";
-import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
-import AddInvoice from "../components/AddInvoice";
+import { Box, Button, Typography,styled } from "@mui/material";
+import { useState, useEffect } from "react";
+import AddInvoice from "../components/addInvoice";
+import Invoices from "../components/Invoices";
+import { getAllInvoices, deleteInvoice } from "../services/api";
 
 
+const Component = styled(Box)`
+    width: 80%;
+    margin: 50px auto;
+    & > h4 {
+        margin-bottom: 20px;
+    }
+    & > thead {
+        background-color: #000;
+    }
+    & > th {
+        color: #FFFFFF;
+        font-weight: 600;
+        font-size: 16px;
+    } 
+    & > td {
+        font-size: 16px;
+    }
+`
 
-const Home = () =>{
-
-const [addInvoice, setAddInvoice] = useState(false);
-
-   const toggleInvoice = ()=>{
-    setAddInvoice(true);
-   } 
-    return(
-    <React.Fragment>
-    <Header/>
-    <Box  style={{ margin: 20}}>
-    <Typography variant="h4">Pending Invoice</Typography>
-     {!addInvoice &&< Button 
-           variant="contained" 
-           style={{marginTop : 20 }}
-           onClick={ () => toggleInvoice()}
-           >Add Invoice
-                    
-           </Button>
+const defaultObj = {
+    id: '',
+    vendor: '',
+    product: '',
+    amount: '',
+    date: ''
 }
-    {addInvoice && <AddInvoice/>}
-    </Box>
-    </React.Fragment>
 
+const Home = () => {
+    const [invoices, setInvoices] = useState([]);
+    const [addInvoice, setAddInvoice] = useState(false);
+
+    useEffect(() => {
+        const getData = async() => {
+            const response = await getAllInvoices();
+            response && response.data && setInvoices(response.data);
+        }
+        getData();
+    }, [addInvoice]);
+
+     const removeInvoice = async (id) => {
+       await deleteInvoice(id);
+
+        const updatedInvoices = invoices.filter(invoice => invoice.id != id);
+        setInvoices(updatedInvoices);
+     }
+
+    const toggleInvoice = () => {
+        setAddInvoice(true);
+    }
+
+    return (
+        <>
+            <Header />
+            <Box style={{ margin: 20 }}>
+                <Typography variant="h4">Pending Invoices</Typography>
+                {
+                    !addInvoice && 
+                        <Button 
+                            variant="contained" 
+                            onClick={() => toggleInvoice()}
+                            style={{ marginTop: 15 }}
+                        >Add Invoice</Button>
+                }
+                {
+                    addInvoice && <AddInvoice setAddInvoice={setAddInvoice} />
+                }
+                <Box>
+                    <Invoices 
+                        removeInvoice={removeInvoice}
+                        invoices={invoices}
+                    />
+                </Box>
+            </Box>
+        </>
     )
 }
 
