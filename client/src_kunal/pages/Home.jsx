@@ -1,11 +1,9 @@
-import React from "react";
-import Header from "../components/header";
-import { Box, Button, Typography,styled } from "@mui/material";
 import { useState, useEffect } from "react";
-import AddInvoice from "../components/addInvoice";
-import Invoices from "../components/Invoices";
+import Header from '../components/Header';
+import { Box, Typography, styled, Button } from '@mui/material';
+import Invoices from '../components/Invoices';
+import AddInvoice from "../components/AddInvoice";
 import { getAllInvoices, deleteInvoice } from "../services/api";
-
 
 const Component = styled(Box)`
     width: 80%;
@@ -46,12 +44,12 @@ const Home = () => {
         getData();
     }, [addInvoice]);
 
-     const removeInvoice = async (id) => {
-       await deleteInvoice(id);
+    // const removeInvoice = async (id) => {
+    //     await deleteInvoice(id);
 
-        const updatedInvoices = invoices.filter(invoice => invoice.id != id);
-        setInvoices(updatedInvoices);
-     }
+    //     const updatedInvoices = invoices.filter(invoice => invoice.id != id);
+    //     setInvoices(updatedInvoices);
+    // }
 
     const toggleInvoice = () => {
         setAddInvoice(true);
